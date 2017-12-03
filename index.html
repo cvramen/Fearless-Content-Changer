@@ -1,0 +1,130 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Fearless Content Changer</title>
+<!-- Fearless Content Changer requires jQuery  -->
+<script src="http://code.jquery.com/jquery-1.11.2.min.js"></script>
+</head>
+<body>
+
+<!-- These are the Previous and Next buttons. 
+Clicking on these DIVs advances the current item in the array "newsarray".
+These are DIVs. They could be anything. As long as the ID is intact, it will work.
+ -->
+<div id="anmt_prev" style="font-size:17pt;">Previous</div><br />
+<div id="anmt_next" style="font-size:17pt;">Next</div><br /><br />
+
+<!-- This is the content that changes, everything inside "anmt_head".
+"anmt_head" is a DIV. Same as above. It could be anything, as long as the ID is intact, it will work.
+The content inside is a DIV with the word "Empty". This will not display when the page loads. We have javascript below that will establish initial contents for "anmt_head".
+ -->
+<div style="font-size:12pt" id="anmt_head"><div>Empty</div></div>
+
+<script src="jquery.js" type="text/javascript"></script>
+<script type="text/javascript">
+$(window).bind("load", function() {
+/* 
+Fearless Content Changer
+original version by Nick Kirkpatrick
+
+
+Note that .hide and .show times are 150 and 300 milliseconds and that the mechanism that automatically changes content executes every 6000 milliseconds. These numbers can be whatever you want them to be. Just keep the .hide and .show 
+
+ */
+
+
+/* 	
+	array of HTML content. You can put any HTML content you want in here
+	Notice all items are in quotes, comma separated. You can have any number of items you wish.
+*/
+var newsarray = [
+	"<div class='new_ann'>Chicken Crosses the Street - Nothing of importance found on other side</div>",
+	"<div class='new_ann'>Earth is Not Flat - Physicists publish shocking new data</div>",
+	"<div class='new_ann'>Air Contains Oxygen - Shown to have strange properties</div>",
+	"<div class='new_ann'>Series of Tubes - New study on the World Wide Web</div>",
+	"<div class='new_ann'>Dihydrogen Monoxide Discovered - Effects of long-term exposure revealed</div>",
+	"<div class='new_ann'>Fly Lands on Human Head - Reports of one casualty</div>"
+];
+
+/* Establish initial contents of #anmt_head */
+var initialplace = true;
+if (initialplace) {
+	$("#anmt_head").html(String(newsarray[0]));
+}
+/* Establish initial contents of #anmt_head */
+
+var primesent = 0; //sentinel, tells you where in the array, newsarray, you are
+var annchange = false; //off switch, as soon as anyone clicks on the next or prev buttons the time-based automatic switching of news items ceases
+
+/* Switches out announcements during time interval */
+setInterval(function()
+{
+	initialplace = false; //we don't need initial contents for #anmt_head, anymore so turns that code off permanently
+	if (annchange == false) {
+		primesent++; //moves us up the array by one
+		if (primesent < (newsarray.length)) {	//runs if we have not reached the end of the array
+			var anmt_headstuff = String(newsarray[primesent]); //pulls content out of the item of the array that corresponds to primesent
+			$("#anmt_head div").hide(150, function() { //gets rid of current content, taking 150 milliseconds
+				$("#anmt_head").html(anmt_headstuff); //insert new content, next line just animates it over the course of 300 milliseconds
+				$(".new_ann").show(300);
+			});
+		} else {
+			primesent = 0; //reset, or go around back to 0		
+			var anmt_headstuff = String(newsarray[primesent]);
+			$("#anmt_head div").hide(150, function() {
+				$("#anmt_head").html(anmt_headstuff);
+				$(".new_ann").show(300);
+			});
+		}
+	}
+},6000);
+/* Switches out announcements during time interval */
+
+
+/* What happens when you click on "previous" button */
+$( "#anmt_prev" ).click(function() {
+	annchange = true;
+	primesent--;
+	if (primesent > -1) {	
+		var anmt_headstuff = String(newsarray[primesent]);
+		$("#anmt_head div").hide(150, function() {
+			$("#anmt_head").html(anmt_headstuff);
+			$(".new_ann").show(300);
+		});
+	} else {
+		primesent = ((newsarray.length)-1); //reset, or go around back to 0		
+		var anmt_headstuff = String(newsarray[primesent]);
+		$("#anmt_head div").hide(150, function() {
+			$("#anmt_head").html(anmt_headstuff);
+			$(".new_ann").show(300);
+		});
+	}
+});
+/* What happens when you click on "previous" button */
+/* What happens when you click on "next" button */
+$( "#anmt_next" ).click(function() {
+	annchange = true;
+	primesent++;
+	if (primesent < (newsarray.length)) {	
+		var anmt_headstuff = String(newsarray[primesent]);
+		$("#anmt_head div").hide(150, function() {
+			$("#anmt_head").html(anmt_headstuff);
+			$(".new_ann").show(300);
+		});
+	} else {
+		primesent = 0; //reset, or go around back to 0		
+		var anmt_headstuff = String(newsarray[primesent]);
+		$("#anmt_head div").hide(150, function() {
+			$("#anmt_head").html(anmt_headstuff);
+			$(".new_ann").show(300);
+		});
+	}
+});
+/* What happens when you click on "next" button */
+	
+});
+</script>
+</div>
+</body>
+</html>
